@@ -3,6 +3,13 @@
 # MPT+
 This is the repository of paper: MPT+: Multi-Perspective Thinking from Large Multimodal Models for Effective Multimodal Sentiment Analysis.
 
+We harness the sophisticated inference capabilities of Large Multimodal Models (LMMs) to evaluate user sentiment polarities through a multi-perspective lens. To effectively integrate these diverse inputs, we implement a custom multi-level feature fusion mechanism.
+
+The implementation details of the LMM are outlined below:
+
+<img width="1785" height="892" alt="image" src="https://github.com/user-attachments/assets/2ab43853-54c0-494f-a201-0fea80793199" />
+
+
 The overview of our proposed model is given as follows:
 
 <img width="1911" height="1037" alt="image" src="https://github.com/user-attachments/assets/de884012-3514-4588-8ac5-9b6e210d6732" />
