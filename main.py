@@ -14,7 +14,7 @@ from sklearn.manifold import TSNE
 import seaborn as sns
 
 
-class EngineOn:
+class Main_Model:
     def __init__(self, args, logger):
         self.args = args
         self.logger = logger
@@ -44,9 +44,8 @@ class EngineOn:
         reduced = tsne.fit_transform(features)
         targets = torch.tensor(targets)
 
-        # 自定义类别名称
-        class_names = ['Positive', 'Neutral', 'Negative']  # 按类别顺序写
-        target_labels = [class_names[t] for t in targets.numpy()]  # 将数字映射为类别名
+        class_names = ['Positive', 'Neutral', 'Negative']
+        target_labels = [class_names[t] for t in targets.numpy()]
 
         plt.figure(figsize=(8, 6))
         custom_colors = ['#fc0000', '#81fe00', '#7000fc']
@@ -55,7 +54,7 @@ class EngineOn:
         sns.scatterplot(
             x=reduced[:, 0],
             y=reduced[:, 1],
-            hue=target_labels,  # 使用自定义标签
+            hue=target_labels,
             palette=palette,
             s=15,
             legend='full'
@@ -82,18 +81,18 @@ class EngineOn:
 
             predicts, feature_embeddings = self.Mymodel(text, image, pos, neu, neg)
             loss = criterion(predicts, targets.long())
-            feature_embeddings = F.normalize(feature_embeddings, dim=1)  # 归一化
-            similarity_matrix = torch.matmul(feature_embeddings, feature_embeddings.T) / temperature  # 计算余弦相似度
+            feature_embeddings = F.normalize(feature_embeddings, dim=1)
+            similarity_matrix = torch.matmul(feature_embeddings, feature_embeddings.T) / temperature
 
-            # 获取 batch 内的正样本索引
+
             mask = (targets.unsqueeze(1) == targets.unsqueeze(0)).float()  # shape: (batch_size, batch_size)
 
-            # 计算 SupCon Loss
-            exp_sim = torch.exp(similarity_matrix)  # softmax 分子
-            exp_sim_sum = exp_sim.sum(dim=1, keepdim=True)  # softmax 分母
 
-            # 仅对 **正样本** 计算 log-softmax
-            log_probs = torch.log(exp_sim / exp_sim_sum)  # 计算 log p
+            exp_sim = torch.exp(similarity_matrix)
+            exp_sim_sum = exp_sim.sum(dim=1, keepdim=True)
+
+
+            log_probs = torch.log(exp_sim / exp_sim_sum)
             supcon_loss = -(log_probs * mask.float()).sum(dim=1) / mask.sum(dim=1)
 
             loss = (1 - contrastive_weight) * loss + contrastive_weight * supcon_loss.mean()
@@ -129,18 +128,18 @@ class EngineOn:
                 targets = targets.to(self.args.device)
                 predicts, feature_embeddings = self.Mymodel(text, image, pos, neu, neg)
                 loss = criterion(predicts, targets.long())
-                feature_embeddings = F.normalize(feature_embeddings, dim=1)  # 归一化
+                feature_embeddings = F.normalize(feature_embeddings, dim=1)
                 all_features.append(feature_embeddings.cpu())
-                similarity_matrix = torch.matmul(feature_embeddings, feature_embeddings.T) / temperature  # 计算余弦相似度
+                similarity_matrix = torch.matmul(feature_embeddings, feature_embeddings.T) / temperature
 
-                # 获取 batch 内的正样本索引
+
                 mask = (targets.unsqueeze(1) == targets.unsqueeze(0)).float()  # shape: (batch_size, batch_size)
 
-                # 计算 SupCon Loss
-                exp_sim = torch.exp(similarity_matrix)  # softmax 分子
-                exp_sim_sum = exp_sim.sum(dim=1, keepdim=True)  # softmax 分母
 
-                # 仅对 **正样本** 计算 log-softmax
+                exp_sim = torch.exp(similarity_matrix)
+                exp_sim_sum = exp_sim.sum(dim=1, keepdim=True)
+
+
                 log_probs = torch.log(exp_sim / exp_sim_sum)  # 计算 log p
                 supcon_loss = -(log_probs * mask.float()).sum(dim=1) / mask.sum(dim=1)
 
@@ -248,6 +247,6 @@ class EngineOn:
 if __name__ == '__main__':
     logging.set_verbosity_error()
     args, logger = get_config()
-    nb = EngineOn(args, logger)
-    nb.run()
+    main_model = Main_Model(args, logger)
+    main_model.run()
 
