@@ -132,7 +132,7 @@ def my_collate(batch, tokenizer):
     return text_ids, torch.tensor(label_ids)
 
 def load_both_dataset(tokenizer, train_batch_size, test_batch_size, model_name, method_name, workers):
-    train_csv_file = r"modified_dataset/mvsa_s_labels_lmm1.tsv"  # 修改为你的文件路径
+    train_csv_file = r"modified_dataset/md_mvsa_m.tsv"  # 修改为你的文件路径
     # test_csv_file = r"dataset/twitter2017/new_test.tsv"
     train_df = pd.read_csv(train_csv_file,sep="\t",encoding='gbk',encoding_errors='ignore')
     # test_df = pd.read_csv(test_csv_file,sep="\t",encoding="utf-8",encoding_errors='ignore')
