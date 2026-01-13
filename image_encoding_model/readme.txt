@@ -1,0 +1,1 @@
+You can put the weights of image encoding model in the 'weight' directory.

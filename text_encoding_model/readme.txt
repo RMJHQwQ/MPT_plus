@@ -1,0 +1,1 @@
+You can put the weights of texxxt encoding model in this directory.
